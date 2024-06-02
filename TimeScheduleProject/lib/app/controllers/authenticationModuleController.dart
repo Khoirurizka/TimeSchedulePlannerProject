@@ -19,7 +19,6 @@ class AuthenticationModuleController {
   TextEditingController signupEmailTEC = TextEditingController();
   TextEditingController signupPasswordTEC = TextEditingController();
   TextEditingController signupUserNameTEC = TextEditingController();
-  TextEditingController signupUserPhoneTEC = TextEditingController();
   var showSignupButtonLoadingAnimation = false.obs;
 
   void onSignupOnLoginPageButtonClick() {
@@ -43,15 +42,15 @@ class AuthenticationModuleController {
         Get.offAllNamed(ROUTES.getHomeScreenRoute);
       } else {
         showCustomSnackBar(
-          title: "Error",
+          title: "Gagal",
           message: result.toString(),
         );
       }
       showLoginButtonLoadingAnimation.value = false;
     } else {
       showCustomSnackBar(
-        title: "Error!",
-        message: "User credentials cannot be left empty. :(",
+        title: "Gagal!",
+        message: "Jangan biarkan data pengguna kosong. :(",
       );
     }
   }
@@ -60,19 +59,15 @@ class AuthenticationModuleController {
     String userName = signupUserNameTEC.value.text;
     String email = signupEmailTEC.value.text;
     String password = signupPasswordTEC.value.text;
-    String phone = signupUserPhoneTEC.value.text;
-    if (phone.isNotEmpty &&
-        userName.isNotEmpty &&
-        email.isNotEmpty &&
-        password.isNotEmpty) {
+    if (userName.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
       showSignupButtonLoadingAnimation.value = true;
       await Future.delayed(const Duration(seconds: 2));
-      String result = await AuthenticationFunctions().signUpUser(
-          userName: userName, email: email, password: password, phone: phone);
+      String result = await AuthenticationFunctions()
+          .signUpUser(userName: userName, email: email, password: password);
       if (result == 'Success') {
         userModel = await AuthenticationFunctions().getUserData();
-        signupUserNameTEC.text = signupPasswordTEC.text =
-            signupEmailTEC.text = signupUserPhoneTEC.text = '';
+        signupUserNameTEC.text =
+            signupPasswordTEC.text = signupEmailTEC.text = '';
         Get.offAllNamed(ROUTES.getHomeScreenRoute);
       } else {
         showCustomSnackBar(
@@ -83,8 +78,8 @@ class AuthenticationModuleController {
       showSignupButtonLoadingAnimation.value = false;
     } else {
       showCustomSnackBar(
-        title: "Error signing up!!",
-        message: "User credentials cannot be left empty. :(",
+        title: "Gagal mendaftar!!",
+        message: "Jangan biarkan data pengguna kosong. :(",
       );
     }
   }
@@ -96,11 +91,11 @@ class AuthenticationModuleController {
 
   void deleteUser() async {
     String success = await AuthenticationFunctions().deleteUser();
-    if (success == "Success") {
+    if (success == "Berhasil") {
       logoutUser();
       showCustomSnackBar(
-        title: "Bye! :)",
-        message: "Your user profile has been deleted!",
+        title: "Selamat tinggal! :)",
+        message: "Akun mu telah dihapus!",
       );
     }
   }

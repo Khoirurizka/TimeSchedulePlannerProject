@@ -25,8 +25,21 @@ class HomeModuleController {
       lastDate: DateTime(2100),
     );
     if (eventDate != null) {
-      selectedEventDate.value = eventDate;
-      showSelectedDate.value = true;
+      var eventTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (eventTime != null) {
+        selectedEventDate.value = DateTime(
+          eventDate.year,
+          eventDate.month,
+          eventDate.day,
+          eventTime.hour,
+          eventTime.minute,
+        );
+        showSelectedDate.value = true;
+      }
     }
   }
 
@@ -52,21 +65,20 @@ class HomeModuleController {
         showSelectedDate.value = false;
         Get.back();
         showCustomSnackBar(
-          title: "Success! :D",
-          message: "Your task has been added to your time_planner list.",
+          title: "Berhasil! :)",
+          message: "Jadwalmu berhasil disimpan.",
         );
       } else {
         showLoadingAnimationInAddATaskPopup.value = false;
         showCustomSnackBar(
-          title: "Error",
-          message:
-              "An error occurred while trying to save our task to your time_planner list.",
+          title: "Gagal",
+          message: "Terjadi error saat menyimpan jadwalmu.",
         );
       }
     } else {
       showCustomSnackBar(
-        title: "Error",
-        message: "Input fields cannot be empty! :(",
+        title: "Gagal",
+        message: "Tidak boleh ada data yang kosong! :(",
       );
     }
   }
@@ -75,8 +87,8 @@ class HomeModuleController {
     await PostingFunctions().deleteTodoTask(id);
     Get.back();
     showCustomSnackBar(
-      title: "Task deleted",
-      message: "Your task has been deleted from time_planner.",
+      title: "Kegiatan dihapus",
+      message: "Kegiatan mu telah dihapus.",
     );
   }
 

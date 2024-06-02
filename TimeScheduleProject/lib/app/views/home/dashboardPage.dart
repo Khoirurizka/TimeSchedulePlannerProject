@@ -15,6 +15,7 @@ import '../../controllers/authenticationModuleController.dart';
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({Key? key}) : super(key: key);
+
   final AuthenticationModuleController authenticationModuleController =
       Get.find();
 
@@ -39,7 +40,7 @@ class DashboardPage extends StatelessWidget {
                 height: 10,
               ),
               getActiveTodoList(),
-              getPendingToDoList(),
+              //getPendingToDoList(),
               getCompletedToDoList(),
               const SizedBox(
                 height: 30,
@@ -174,7 +175,7 @@ class DashboardPage extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    'Completed',
+                    'Telah Dilaksanakan',
                     style: getBoldTextStyle.copyWith(
                       color: Get.isDarkMode ? getPrimaryColor : darkBlueColor,
                     ),
@@ -220,7 +221,7 @@ class DashboardPage extends StatelessWidget {
               }
               if (snapshot.data!.docs.isEmpty) {
                 return Text(
-                  'You have not completed any tasks yet!!',
+                  'Belum ada kegiatan yang dilaksanakan',
                   style: getDefaultTextStyle.copyWith(
                       color: greyColor, fontSize: 12),
                 );
@@ -264,14 +265,14 @@ class DashboardPage extends StatelessWidget {
                     width: 15,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.pink,
+                      color: Color.fromARGB(255, 10, 112, 255),
                     ),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    'Active',
+                    'Akan Dilaksanakan',
                     style: getBoldTextStyle.copyWith(
                       color: Get.isDarkMode ? getPrimaryColor : darkBlueColor,
                     ),
@@ -317,7 +318,7 @@ class DashboardPage extends StatelessWidget {
               }
               if (snapshot.data!.docs.isEmpty) {
                 return Text(
-                  'No active tasks',
+                  'Belum ada kegiatan',
                   style: getDefaultTextStyle.copyWith(
                       color: greyColor, fontSize: 12),
                 );
@@ -346,12 +347,12 @@ class DashboardPage extends StatelessWidget {
 
   Container getCustomAppBar() {
     return Container(
-      height: 150,
+      height: 160,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Get.theme.colorScheme.primary,
-            Get.theme.colorScheme.secondary,
+            Color.fromARGB(255, 32, 77, 135),
+            Color.fromARGB(255, 111, 237, 251),
           ],
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
@@ -440,12 +441,19 @@ class DashboardPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Today, ${DateFormat.MMMEd().format(DateTime.now())}.",
-                  style: getSubtitleTextStyle.copyWith(height: .9),
+                  "Jadwal Kegiatan",
+                  style: getBoldTextStyle.copyWith(fontSize: 20),
                 ),
                 Text(
-                  "Time Planner Dashboard",
+                  "Kepala Dinas",
                   style: getBoldTextStyle.copyWith(fontSize: 20),
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  "${DateFormat('EEEE, d MMMM y', "id_ID").format(DateTime.now())}.",
+                  style: getSubtitleTextStyle.copyWith(height: .9),
                 ),
               ],
             ),

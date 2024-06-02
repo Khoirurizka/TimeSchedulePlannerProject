@@ -32,7 +32,7 @@ class _HomescreenState extends State<Homescreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: AppBar(
-          backgroundColor: Get.theme.colorScheme.primary,
+          backgroundColor: Color.fromARGB(255, 32, 77, 135),
           elevation: 0,
         ),
       ),
@@ -56,7 +56,7 @@ class _HomescreenState extends State<Homescreen> {
         onPressed: () {
           showAddATaskDialogPopUp(context);
         },
-        backgroundColor: Get.theme.colorScheme.primary,
+        backgroundColor: Color.fromARGB(255, 32, 77, 135),
         child: const Icon(
           Icons.add,
           color: Colors.white,
@@ -70,9 +70,9 @@ class _HomescreenState extends State<Homescreen> {
     return Obx(() {
       return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Get.theme.colorScheme.primary,
+        selectedItemColor: Color.fromARGB(255, 255, 255, 255), //,
         unselectedItemColor: greyColor,
-        backgroundColor: Get.theme.scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 32, 77, 135),
         elevation: 6,
         currentIndex: controller.currentPageIndexOnMainframe.value,
         onTap: (value) {
@@ -88,19 +88,19 @@ class _HomescreenState extends State<Homescreen> {
             icon: Icon(
               Icons.checklist,
               color: controller.currentPageIndexOnMainframe.value == 0
-                  ? Get.theme.colorScheme.primary
+                  ? Color.fromARGB(255, 255, 255, 255)
                   : greyColor,
             ),
-            label: "Dashboard",
+            label: "Jadwal",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.calendar_today,
               color: controller.currentPageIndexOnMainframe.value == 1
-                  ? Get.theme.colorScheme.primary
+                  ? Color.fromARGB(255, 255, 255, 255)
                   : greyColor,
             ),
-            label: "Completed",
+            label: "Selesai",
           ),
         ],
       );
@@ -112,9 +112,9 @@ class _HomescreenState extends State<Homescreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text(
-          "Adding a Task",
+          "Tambahkan kegiatan",
           style: getBoldTextStyle.copyWith(
-            color: Get.theme.colorScheme.primary,
+            color: Color.fromARGB(255, 32, 77, 135),
             fontSize: 20,
           ),
         ),
@@ -130,9 +130,9 @@ class _HomescreenState extends State<Homescreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Title',
+                'Judul',
                 style: getBoldTextStyle.copyWith(
-                  color: Get.theme.colorScheme.primary,
+                  color: Color.fromARGB(255, 32, 77, 135),
                 ),
               ),
               const SizedBox(
@@ -140,7 +140,7 @@ class _HomescreenState extends State<Homescreen> {
               ),
               CustomTextField(
                 TEC: controller.addATaskTitleTEC,
-                hint: "Enter a title",
+                hint: "Masukkan judul",
                 textInputType: TextInputType.text,
                 maxLines: 1,
               ),
@@ -148,9 +148,9 @@ class _HomescreenState extends State<Homescreen> {
                 height: 10,
               ),
               Text(
-                'Description',
+                'Diskripsi',
                 style: getBoldTextStyle.copyWith(
-                  color: Get.theme.colorScheme.primary,
+                  color: Color.fromARGB(255, 32, 77, 135),
                 ),
               ),
               const SizedBox(
@@ -158,7 +158,7 @@ class _HomescreenState extends State<Homescreen> {
               ),
               CustomTextField(
                 TEC: controller.addATaskDescriptionTEC,
-                hint: "Enter a description",
+                hint: "Masukkan diskripsi",
                 textInputType: TextInputType.text,
                 maxLines: 5,
               ),
@@ -166,9 +166,9 @@ class _HomescreenState extends State<Homescreen> {
                 height: 10,
               ),
               Text(
-                'Event date',
+                'Tanggal',
                 style: getBoldTextStyle.copyWith(
-                  color: Get.theme.colorScheme.primary,
+                  color: Color.fromARGB(255, 32, 77, 135),
                 ),
               ),
               Obx(() {
@@ -179,7 +179,7 @@ class _HomescreenState extends State<Homescreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                DateFormat.MMMEd()
+                                DateFormat('EEEE, d MMMM y HH:mm', "id_ID")
                                     .format(controller.selectedEventDate.value),
                                 style: getDefaultTextStyle.copyWith(
                                   color: Get.isDarkMode
@@ -221,11 +221,11 @@ class _HomescreenState extends State<Homescreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: Get.theme.colorScheme.primary,
+                                    color: Color.fromARGB(255, 32, 77, 135),
                                   ),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "Today",
+                                    "Hari ini",
                                     style: getBoldTextStyle,
                                   ),
                                 ),
@@ -242,11 +242,11 @@ class _HomescreenState extends State<Homescreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: Get.theme.colorScheme.primary,
+                                    color: Color.fromARGB(255, 32, 77, 135),
                                   ),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "Schedule",
+                                    "Jadwalkan",
                                     style: getBoldTextStyle,
                                   ),
                                 ),
@@ -288,7 +288,7 @@ class _HomescreenState extends State<Homescreen> {
                 width: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Get.theme.colorScheme.secondary,
+                  color: Color.fromARGB(255, 52, 204, 111),
                 ),
                 alignment: Alignment.center,
                 child: controller.showLoadingAnimationInAddATaskPopup.value

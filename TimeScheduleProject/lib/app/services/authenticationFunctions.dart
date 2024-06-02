@@ -18,7 +18,6 @@ class AuthenticationFunctions {
     required String userName,
     required String email,
     required String password,
-    required String phone,
   }) async {
     try {
       UserCredential userCredential = await firebaseAuth
@@ -27,7 +26,6 @@ class AuthenticationFunctions {
         email,
         userName,
         userCredential.user!.uid,
-        phone,
       );
       return "Success";
     } on FirebaseAuthException catch (e) {
@@ -38,12 +36,11 @@ class AuthenticationFunctions {
   }
 
   Future<void> _storeUserDataOnFirebase(
-      String email, String userName, String id, String phone) async {
+      String email, String userName, String id) async {
     UserModel tempUserModel = UserModel.name(
       email: email,
       userName: userName,
       userId: id,
-      phone: phone,
     );
     await firebaseFirestore.collection('users').doc(id).set(
           tempUserModel.toJson(),

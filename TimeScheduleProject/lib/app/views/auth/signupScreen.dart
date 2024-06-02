@@ -20,17 +20,17 @@ class SignupScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "New user?",
+          "Buat akun baru?",
           style: getBoldTextStyle.copyWith(
-            color: Get.theme.colorScheme.primary,
+            color: Color.fromARGB(255, 29, 79, 164),
           ),
         ),
         leading: CustomBackButton(),
-        backgroundColor: Get.theme.scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 227, 251, 255),
         centerTitle: true,
         elevation: 0,
       ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Color.fromARGB(255, 227, 251, 255),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         height: Get.height,
@@ -42,18 +42,20 @@ class SignupScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Create an account.",
+                "Buat akun.",
                 style: getBoldTextStyle.copyWith(
                   fontSize: 20,
-                  color: Get.theme.primaryColor,
+                  color: Color.fromARGB(255, 29, 79, 164),
                 ),
               ),
-              Text(
-                "Hi, please create an account to continue using the app!",
-                style: getDefaultTextStyle.copyWith(
-                  color:
-                      Get.isDarkMode ? greyColor : blackColor.withOpacity(.6),
-                  fontSize: 14,
+              Container(
+                child: Text(
+                  "Selamat datang, silahkan buat akun untuk menggunakan aplikasi ini!",
+                  style: getDefaultTextStyle.copyWith(
+                    color:
+                        Get.isDarkMode ? greyColor : blackColor.withOpacity(.6),
+                    fontSize: 14,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -68,22 +70,21 @@ class SignupScreen extends StatelessWidget {
                   onTap: controller.onSignupButtonClick,
                   child: Container(
                     height: 55,
-                    width: Get.width / 2,
+                    width: 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                        7,
+                        25,
                       ),
-                      color: Get.theme.colorScheme.primary,
+                      border: Border.all(
+                          color: Color.fromARGB(255, 29, 79, 164), width: 3),
+                      color: Color.fromARGB(255, 51, 116, 201),
                     ),
                     alignment: Alignment.center,
-                    child: controller.showSignupButtonLoadingAnimation.value
+                    child: controller.showLoginButtonLoadingAnimation.value
                         ? const CustomCircularProgressLoadingIndicator()
                         : Text(
-                            'Signup',
-                            style: getBoldTextStyle.copyWith(
-                                color: whiteColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800),
+                            'Daftar',
+                            style: getBoldTextStyle,
                           ),
                   ),
                 );
@@ -104,9 +105,9 @@ class SignupScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'USERNAME',
+          'Nama',
           style: getDefaultTextStyle.copyWith(
-            color: Get.theme.primaryColor,
+            color: Color.fromARGB(255, 29, 79, 164),
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -115,7 +116,7 @@ class SignupScreen extends StatelessWidget {
         ),
         CustomTextField(
           TEC: controller.signupUserNameTEC,
-          hint: "Enter your username...",
+          hint: "Masukkan nama pengguna...",
           textInputType: TextInputType.text,
           maxLines: 1,
         ),
@@ -123,9 +124,9 @@ class SignupScreen extends StatelessWidget {
           height: 10,
         ),
         Text(
-          'EMAIL ADDRESS',
+          'Alamat Email',
           style: getDefaultTextStyle.copyWith(
-            color: Get.theme.primaryColor,
+            color: Color.fromARGB(255, 29, 79, 164),
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -134,7 +135,7 @@ class SignupScreen extends StatelessWidget {
         ),
         CustomTextField(
           TEC: controller.signupEmailTEC,
-          hint: "Enter your email address...",
+          hint: "Masukkan alamat email...",
           textInputType: TextInputType.text,
           maxLines: 1,
         ),
@@ -142,9 +143,9 @@ class SignupScreen extends StatelessWidget {
           height: 10,
         ),
         Text(
-          'PASSWORD',
+          'Kata Sandi',
           style: getDefaultTextStyle.copyWith(
-            color: Get.theme.primaryColor,
+            color: Color.fromARGB(255, 29, 79, 164),
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -153,29 +154,10 @@ class SignupScreen extends StatelessWidget {
         ),
         CustomTextField(
           TEC: controller.signupPasswordTEC,
-          hint: "Enter your password...",
+          hint: "Masukkan kata sandi...",
           textInputType: TextInputType.text,
           maxLines: 1,
           isPassword: true,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          'PHONE',
-          style: getDefaultTextStyle.copyWith(
-            color: Get.theme.primaryColor,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        CustomTextField(
-          TEC: controller.signupUserPhoneTEC,
-          hint: "Enter your phone number...",
-          textInputType: TextInputType.text,
-          maxLines: 1,
         ),
       ],
     );

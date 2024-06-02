@@ -46,7 +46,7 @@ class CompletedPage extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      'Completed Tasks',
+                      'Kegiatan Selesai',
                       style: getBoldTextStyle.copyWith(
                         color: Get.isDarkMode ? getPrimaryColor : darkBlueColor,
                       ),
@@ -68,7 +68,7 @@ class CompletedPage extends StatelessWidget {
                     }
                     if (snapshot.data!.docs.isEmpty) {
                       return Text(
-                        'You have not completed any tasks yet!!',
+                        'Belum ada kegiatan yang dilaksanakan',
                         style: getDefaultTextStyle.copyWith(
                             color: greyColor, fontSize: 12),
                       );
