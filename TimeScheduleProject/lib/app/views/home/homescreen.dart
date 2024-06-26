@@ -8,6 +8,8 @@ import 'package:time_planner/app/views/home/completedPage.dart';
 import 'package:time_planner/app/views/home/dashboardPage.dart';
 
 import '../../widgets/customTextField.dart';
+import '../../controllers/authenticationModuleController.dart';
+import 'package:time_planner/app/widgets/DropdownRole.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({Key? key}) : super(key: key);
@@ -18,7 +20,8 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   final HomeModuleController controller = Get.find();
-
+  final AuthenticationModuleController authenticationModuleController =
+      Get.find();
   @override
   void dispose() {
     Get.delete<HomeModuleController>();
@@ -52,16 +55,21 @@ class _HomescreenState extends State<Homescreen> {
         ),
       ),
       bottomNavigationBar: getBottomNavigationBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showAddATaskDialogPopUp(context);
-        },
-        backgroundColor: Color.fromARGB(255, 32, 77, 135),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton:
+          authenticationModuleController.userModel.userRole != "Admin"
+              ? const SizedBox(
+                  height: 10,
+                )
+              : FloatingActionButton(
+                  onPressed: () {
+                    showAddATaskDialogPopUp(context);
+                  },
+                  backgroundColor: Color.fromARGB(255, 32, 77, 135),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -130,6 +138,21 @@ class _HomescreenState extends State<Homescreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                'Kepada',
+                style: getBoldTextStyle.copyWith(
+                  color: Color.fromARGB(255, 32, 77, 135),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              DropdownRole(
+                TEC: controller.toRoleTEC,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
                 'Judul',
                 style: getBoldTextStyle.copyWith(
                   color: Color.fromARGB(255, 32, 77, 135),
@@ -166,7 +189,7 @@ class _HomescreenState extends State<Homescreen> {
                 height: 10,
               ),
               Text(
-                'Tanggal',
+                'Tanggal/Waktu',
                 style: getBoldTextStyle.copyWith(
                   color: Color.fromARGB(255, 32, 77, 135),
                 ),
@@ -209,8 +232,9 @@ class _HomescreenState extends State<Homescreen> {
                             height: 5,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              GestureDetector(
+                              /*GestureDetector(
                                 onTap: () {
                                   controller.selectedEventDate.value =
                                       DateTime.now();
@@ -229,7 +253,7 @@ class _HomescreenState extends State<Homescreen> {
                                     style: getBoldTextStyle,
                                   ),
                                 ),
-                              ),
+                              ),*/
                               const SizedBox(
                                 width: 10,
                               ),
@@ -238,7 +262,7 @@ class _HomescreenState extends State<Homescreen> {
                                   controller.selectDate(context);
                                 },
                                 child: Container(
-                                  width: 100,
+                                  width: 200,
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
@@ -246,7 +270,7 @@ class _HomescreenState extends State<Homescreen> {
                                   ),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "Jadwalkan",
+                                    "Pilih tanggal/waktu",
                                     style: getBoldTextStyle,
                                   ),
                                 ),
@@ -271,11 +295,15 @@ class _HomescreenState extends State<Homescreen> {
             child: Container(
               height: 40,
               width: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.red,
+              ),
               alignment: Alignment.center,
               child: Text(
-                'Cancel  ',
+                'Batal',
                 style: getBoldTextStyle.copyWith(
-                  color: errorColor,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -294,8 +322,10 @@ class _HomescreenState extends State<Homescreen> {
                 child: controller.showLoadingAnimationInAddATaskPopup.value
                     ? const CustomCircularProgressLoadingIndicator()
                     : Text(
-                        'Save',
-                        style: getBoldTextStyle,
+                        'Simpan',
+                        style: getBoldTextStyle.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
               ),
             );

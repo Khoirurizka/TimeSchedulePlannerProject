@@ -26,27 +26,33 @@ class ShowTaskDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Task details",
+          "Detail Kegiatan",
           style: getBoldTextStyle.copyWith(
-            color: Get.theme.colorScheme.primary,
+            color: Color.fromARGB(255, 10, 112, 255),
           ),
         ),
         leading: CustomBackButton(),
         backgroundColor: Get.theme.scaffoldBackgroundColor,
         centerTitle: true,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              homeModuleController.deleteTodoTask(task.id);
-            },
-            icon: const Icon(
-              Icons.delete_outline,
-              color: errorColor,
-              size: 25,
-            ),
-          ),
-          Padding(
+        actions: authenticationModuleController.userModel.userRole != "Admin"
+            ? [
+                SizedBox(
+                  width: 5,
+                )
+              ]
+            : [
+                IconButton(
+                  onPressed: () {
+                    homeModuleController.deleteTodoTask(task.toRole, task.id);
+                  },
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: errorColor,
+                    size: 25,
+                  ),
+                ),
+                /* Padding(
             padding: const EdgeInsets.only(right: 5),
             child: IconButton(
               onPressed: () {},
@@ -56,15 +62,15 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                 size: 25,
               ),
             ),
-          ),
-        ],
+          ),*/
+              ],
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(authenticationModuleController.userModel.userId)
-            .collection('tasks')
+            .collection('Dispora')
+            .doc('jadwal_kegiatan') //firebaseAuth.currentUser!.uid)
+            .collection(task.toRole)
             .where(
               'id',
               isEqualTo: task.id,
@@ -93,9 +99,21 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Title',
+                          "Kepada",
                           style: getBoldTextStyle.copyWith(
-                            color: Get.theme.colorScheme.primary,
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        Text(
+                          taskModel.toRole,
+                          style: getDefaultTextStyle.copyWith(
+                            color: Get.isDarkMode ? whiteColor : blackColor,
+                          ),
+                        ),
+                        Text(
+                          'Judul',
+                          style: getBoldTextStyle.copyWith(
+                            color: Color.fromARGB(255, 10, 112, 255),
                           ),
                         ),
                         Text(
@@ -108,9 +126,9 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          'Description',
+                          'Deskripsi',
                           style: getBoldTextStyle.copyWith(
-                            color: Get.theme.colorScheme.primary,
+                            color: Color.fromARGB(255, 10, 112, 255),
                           ),
                         ),
                         Text(
@@ -123,13 +141,13 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          'Event date',
+                          'Tanggal/Waktu',
                           style: getBoldTextStyle.copyWith(
-                            color: Get.theme.colorScheme.primary,
+                            color: Color.fromARGB(255, 10, 112, 255),
                           ),
                         ),
                         Text(
-                          DateFormat.MMMEd().format(taskModel.eventDate),
+                          "${DateFormat('EEEE, d MMMM y', "id_ID").format(taskModel.eventDate)}.",
                           style: getDefaultTextStyle.copyWith(
                             color: Get.isDarkMode
                                 ? whiteColor.withOpacity(.6)
@@ -142,45 +160,39 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                         Text(
                           'Status',
                           style: getBoldTextStyle.copyWith(
-                            color: Get.theme.colorScheme.primary,
+                            color: Color.fromARGB(255, 10, 112, 255),
                           ),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            PostingFunctions()
-                                .changeTaskStatus("Active", taskModel.id);
-                          },
-                          child: Container(
-                            height: 55,
-                            width: Get.width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Get.theme.colorScheme.secondary,
-                                width: 2,
-                              ),
-                              color: taskModel.status == "Active"
-                                  ? Get.theme.colorScheme.secondary
-                                  : Get.theme.scaffoldBackgroundColor,
+                        Container(
+                          height: 55,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2,
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Active',
-                              style: getBoldTextStyle.copyWith(
-                                color: taskModel.status == "Active"
-                                    ? Get.theme.scaffoldBackgroundColor
-                                    : Get.theme.colorScheme.secondary,
-                              ),
+                            color: taskModel.eventDate.isAfter(DateTime.now())
+                                ? Color.fromARGB(255, 10, 112, 255)
+                                : Get.theme.scaffoldBackgroundColor,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Akan Dilaksanakan',
+                            style: getBoldTextStyle.copyWith(
+                              color: taskModel.eventDate.isAfter(DateTime.now())
+                                  ? Get.theme.scaffoldBackgroundColor
+                                  : Colors.black,
                             ),
                           ),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        GestureDetector(
+                        /*GestureDetector(
                           onTap: () {
                             PostingFunctions()
                                 .changeTaskStatus("Pending", taskModel.id);
@@ -211,33 +223,28 @@ class ShowTaskDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(
                           height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            PostingFunctions()
-                                .changeTaskStatus("Completed", taskModel.id);
-                          },
-                          child: Container(
-                            height: 55,
-                            width: Get.width,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Get.theme.colorScheme.secondary,
-                                width: 2,
-                              ),
-                              color: taskModel.status == "Completed"
-                                  ? Get.theme.colorScheme.secondary
-                                  : Get.theme.scaffoldBackgroundColor,
+                        ),*/
+                        Container(
+                          height: 55,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2,
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Completed',
-                              style: getBoldTextStyle.copyWith(
-                                color: taskModel.status == "Completed"
-                                    ? Get.theme.scaffoldBackgroundColor
-                                    : Get.theme.colorScheme.secondary,
-                              ),
+                            color: taskModel.eventDate.isBefore(DateTime.now())
+                                ? Colors.green
+                                : Get.theme.scaffoldBackgroundColor,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Dilaksanakan',
+                            style: getBoldTextStyle.copyWith(
+                              color:
+                                  taskModel.eventDate.isBefore(DateTime.now())
+                                      ? Get.theme.scaffoldBackgroundColor
+                                      : Colors.black,
                             ),
                           ),
                         ),

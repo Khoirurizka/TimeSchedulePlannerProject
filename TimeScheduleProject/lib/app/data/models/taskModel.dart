@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
+  late String toRole;
   late String title;
   late String description;
   late DateTime eventDate;
@@ -10,6 +11,7 @@ class TaskModel {
   late String id;
 
   TaskModel.name({
+    required this.toRole,
     required this.title,
     required this.description,
     required this.eventDate,
@@ -18,6 +20,7 @@ class TaskModel {
   });
 
   Map<String, dynamic> toJson() => {
+        'toRole': toRole,
         'title': title,
         'description': description,
         'eventDate': eventDate,
@@ -30,6 +33,7 @@ class TaskModel {
     return TaskModel.name(
       id: snapshot['id'],
       status: snapshot['status'],
+      toRole: snapshot['toRole'],
       title: snapshot['title'],
       description: snapshot['description'],
       eventDate: (snapshot['eventDate'] as Timestamp).toDate(),

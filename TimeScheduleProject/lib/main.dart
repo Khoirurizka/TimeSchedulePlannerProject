@@ -8,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_planner/app/data/theme/theme.dart';
 import 'package:time_planner/app/data/theme/themeService.dart';
 import 'package:time_planner/app/routes/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,8 @@ class time_plannerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      supportedLocales: const [Locale('id', 'ID')],
       debugShowCheckedModeBanner: false,
       smartManagement: SmartManagement.onlyBuilder,
       theme: CustomTheme().customLightTheme,

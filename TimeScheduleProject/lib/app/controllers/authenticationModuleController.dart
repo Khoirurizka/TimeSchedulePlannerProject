@@ -19,6 +19,7 @@ class AuthenticationModuleController {
   TextEditingController signupEmailTEC = TextEditingController();
   TextEditingController signupPasswordTEC = TextEditingController();
   TextEditingController signupUserNameTEC = TextEditingController();
+  TextEditingController signupUserRoleTEC = TextEditingController();
   var showSignupButtonLoadingAnimation = false.obs;
 
   void onSignupOnLoginPageButtonClick() {
@@ -57,13 +58,20 @@ class AuthenticationModuleController {
 
   void onSignupButtonClick() async {
     String userName = signupUserNameTEC.value.text;
+    String userRole = signupUserRoleTEC.value.text;
     String email = signupEmailTEC.value.text;
     String password = signupPasswordTEC.value.text;
-    if (userName.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
+    if (userName.isNotEmpty &&
+        userRole.isNotEmpty &&
+        email.isNotEmpty &&
+        password.isNotEmpty) {
       showSignupButtonLoadingAnimation.value = true;
       await Future.delayed(const Duration(seconds: 2));
-      String result = await AuthenticationFunctions()
-          .signUpUser(userName: userName, email: email, password: password);
+      String result = await AuthenticationFunctions().signUpUser(
+          userName: userName,
+          userRole: userRole,
+          email: email,
+          password: password);
       if (result == 'Success') {
         userModel = await AuthenticationFunctions().getUserData();
         signupUserNameTEC.text =

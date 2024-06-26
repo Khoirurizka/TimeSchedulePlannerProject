@@ -7,6 +7,7 @@ import 'package:time_planner/app/data/theme/theme.dart';
 import 'package:time_planner/app/widgets/customBackButton.dart';
 import 'package:time_planner/app/widgets/customCircularProgressLoadingIndicator.dart';
 import 'package:time_planner/app/widgets/customTextField.dart';
+import 'package:time_planner/app/widgets/DropdownRole.dart';
 import 'package:time_planner/app/controllers/authenticationModuleController.dart';
 import 'package:time_planner/app/widgets/socialMediaButton.dart';
 
@@ -122,6 +123,16 @@ class SignupScreen extends StatelessWidget {
         ),
         const SizedBox(
           height: 10,
+        ),
+        Text(
+          'Sebagai',
+          style: getDefaultTextStyle.copyWith(
+            color: Color.fromARGB(255, 29, 79, 164),
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        DropdownRole(
+          TEC: controller.signupUserRoleTEC,
         ),
         Text(
           'Alamat Email',

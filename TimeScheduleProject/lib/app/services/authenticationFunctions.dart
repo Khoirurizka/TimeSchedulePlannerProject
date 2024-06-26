@@ -16,6 +16,7 @@ class AuthenticationFunctions {
 
   Future<String> signUpUser({
     required String userName,
+    required String userRole,
     required String email,
     required String password,
   }) async {
@@ -25,6 +26,7 @@ class AuthenticationFunctions {
       _storeUserDataOnFirebase(
         email,
         userName,
+        userRole,
         userCredential.user!.uid,
       );
       return "Success";
@@ -36,10 +38,11 @@ class AuthenticationFunctions {
   }
 
   Future<void> _storeUserDataOnFirebase(
-      String email, String userName, String id) async {
+      String email, String userName, String userRole, String id) async {
     UserModel tempUserModel = UserModel.name(
       email: email,
       userName: userName,
+      userRole: userRole,
       userId: id,
     );
     await firebaseFirestore.collection('users').doc(id).set(

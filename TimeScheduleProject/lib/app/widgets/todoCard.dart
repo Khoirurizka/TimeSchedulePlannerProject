@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:time_planner/app/data/theme/theme.dart';
 import 'package:time_planner/app/views/taskDetailsScreen.dart';
 import 'package:time_planner/app/data/models/taskModel.dart';
-
-import 'package:timeago/timeago.dart' as timeago;
 
 class ToDoCard extends StatelessWidget {
   final TaskModel task;
@@ -35,14 +34,14 @@ class ToDoCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  task.status == "Pending"
+                /* Icon(
+                  task.status == "Active"
                       ? FontAwesomeIcons.clipboard
                       : task.status == "Active"
                           ? FontAwesomeIcons.clipboardQuestion
                           : FontAwesomeIcons.clipboardCheck,
                   color: Get.isDarkMode ? darkPrimaryColor : lightPrimaryColor,
-                ),
+                ),*/
                 const SizedBox(
                   width: 10,
                 ),
@@ -56,7 +55,7 @@ class ToDoCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  timeago.format(task.eventDate),
+                  "${DateFormat('EEEE, d MMMM y', "id_ID").format(task.eventDate)}.",
                   style: getSubtitleTextStyle.copyWith(
                     color: Get.isDarkMode
                         ? whiteColor.withOpacity(.6)

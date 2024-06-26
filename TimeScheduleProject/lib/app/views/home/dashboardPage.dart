@@ -41,7 +41,7 @@ class DashboardPage extends StatelessWidget {
               ),
               getActiveTodoList(),
               //getPendingToDoList(),
-              getCompletedToDoList(),
+              //  getCompletedToDoList(),
               const SizedBox(
                 height: 30,
               ),
@@ -182,7 +182,7 @@ class DashboardPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              /*  Row(
                 children: [
                   GestureDetector(
                     onTap: () {},
@@ -204,15 +204,15 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),
           StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(authenticationModuleController.userModel.userId)
-                .collection('tasks')
-                .where('status', isEqualTo: "Completed")
+                .collection('Dispora')
+                .doc('jadwal_kegiatan')
+                .collection(authenticationModuleController.userModel.userRole)
+                .where('eventDate', isLessThan: DateTime.now())
                 .snapshots(),
             builder: (context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -254,32 +254,366 @@ class DashboardPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    height: 15,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 10, 112, 255),
+        children: authenticationModuleController.userModel.userRole == "Admin"
+            ? [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Kegiatan kepala Dinas yang\nAkan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    'Akan Dilaksanakan',
-                    style: getBoldTextStyle.copyWith(
-                      color: Get.isDarkMode ? getPrimaryColor : darkBlueColor,
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection("kepala Dinas")
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //Sekretaris
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Kegiatan Sekretaris yang\nAkan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection("Sekretaris")
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //Bidang Kepemudaan
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Kegiatan Bidang Kepemudaan yang\nAkan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection("Bidang Kepemudaan")
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //Bidang Keolahragaan
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Kegiatan Bidang Keolahragaan yang\nAkan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection("Bidang Keolahragaan")
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                //Bidang Pariwisata
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Kegiatan Bidang Pariwisata yang\nAkan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection("Bidang Pariwisata")
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ]
+            : [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color.fromARGB(255, 10, 112, 255),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Akan Dilaksanakan',
+                          style: getBoldTextStyle.copyWith(
+                            color: Get.isDarkMode
+                                ? getPrimaryColor
+                                : darkBlueColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    /*Row(
                 children: [
                   GestureDetector(
                     onTap: () {},
@@ -301,46 +635,48 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
-            ],
-          ),
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(authenticationModuleController.userModel.userId)
-                .collection('tasks')
-                .where('status', isEqualTo: "Active")
-                .snapshots(),
-            builder: (context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CustomCircularProgressLoadingIndicator();
-              }
-              if (snapshot.data!.docs.isEmpty) {
-                return Text(
-                  'Belum ada kegiatan',
-                  style: getDefaultTextStyle.copyWith(
-                      color: greyColor, fontSize: 12),
-                );
-              }
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  TaskModel taskModel =
-                      TaskModel.fromSnap(snapshot.data!.docs[index]);
-                  return ToDoCard(
-                    task: taskModel,
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
+              )*/
+                  ],
+                ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Dispora')
+                      .doc('jadwal_kegiatan')
+                      .collection(
+                          authenticationModuleController.userModel.userRole)
+                      .where('eventDate', isGreaterThan: DateTime.now())
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CustomCircularProgressLoadingIndicator();
+                    }
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Text(
+                        'Belum ada kegiatan',
+                        style: getDefaultTextStyle.copyWith(
+                            color: greyColor, fontSize: 12),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        TaskModel taskModel =
+                            TaskModel.fromSnap(snapshot.data!.docs[index]);
+                        return ToDoCard(
+                          task: taskModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
       ),
     );
   }
@@ -414,7 +750,7 @@ class DashboardPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                GestureDetector(
+                /* GestureDetector(
                   onTap: () {
                     Get.to(() => SearchScreen());
                   },
@@ -430,7 +766,7 @@ class DashboardPage extends StatelessWidget {
                       color: Get.theme.scaffoldBackgroundColor,
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
             const Expanded(
@@ -445,8 +781,11 @@ class DashboardPage extends StatelessWidget {
                   style: getBoldTextStyle.copyWith(fontSize: 20),
                 ),
                 Text(
-                  "Kepala Dinas",
-                  style: getBoldTextStyle.copyWith(fontSize: 20),
+                  authenticationModuleController.userModel.userRole,
+                  style: getBoldTextStyle.copyWith(
+                    fontSize: 20,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(
                   height: 2,

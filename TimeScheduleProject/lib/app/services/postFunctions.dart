@@ -6,13 +6,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:time_planner/app/data/models/taskModel.dart';
 import 'package:uuid/uuid.dart';
+import '../controllers/authenticationModuleController.dart';
+import 'package:get/get.dart';
+import 'package:time_planner/app/data/models/taskModel.dart';
 
 class PostingFunctions {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final AuthenticationModuleController authenticationModuleController =
+      Get.find();
 
   Future<String> addATask(
-      {required String title,
+      {required String toRole,
+      required String title,
       required String description,
       required DateTime eventDate,
       required String status}) async {
@@ -20,17 +26,34 @@ class PostingFunctions {
       String taskId = const Uuid().v1();
       TaskModel taskModel = TaskModel.name(
         id: taskId,
+        toRole: toRole,
         title: title,
         description: description,
         eventDate: eventDate,
         status: status,
       );
       firebaseFirestore
-          .collection('users')
+          /*  .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
           .collection('tasks')
           .doc(taskId)
+          .set(taskModel.toJson());*/
+          .collection('Dispora')
+          .doc('jadwal_kegiatan') //firebaseAuth.currentUser!.uid)
+          .collection(taskModel.toRole)
+          .doc(taskId)
           .set(taskModel.toJson());
+      /*   firebaseFirestore
+          /*  .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('tasks')
+          .doc(taskId)
+          .set(taskModel.toJson());*/
+          .collection('Dispora')
+          .doc('jadwal_kegiatan') //firebaseAuth.currentUser!.uid)
+          .collection("Admin")
+          .doc(taskId)
+          .set(taskModel.toJson());*/
       return "Success";
     } on FirebaseException catch (e) {
       return e.message.toString();
@@ -48,11 +71,11 @@ class PostingFunctions {
         .update({'status': status});
   }
 
-  Future<void> deleteTodoTask(String taskId) async {
+  Future<void> deleteTodoTask(String toRole, String taskId) async {
     await firebaseFirestore
-        .collection('users')
-        .doc(firebaseAuth.currentUser!.uid)
-        .collection('tasks')
+        .collection('Dispora')
+        .doc('jadwal_kegiatan')
+        .collection(toRole)
         .doc(taskId)
         .delete();
     return;
@@ -69,7 +92,7 @@ class PostingFunctions {
         TaskModel tempTaskModel;
         for (var element in snapshot.docs) {
           tempTaskModel = TaskModel.fromSnap(element);
-          await deleteTodoTask(tempTaskModel.id);
+          await deleteTodoTask(tempTaskModel.toRole, tempTaskModel.id);
         }
       },
     );

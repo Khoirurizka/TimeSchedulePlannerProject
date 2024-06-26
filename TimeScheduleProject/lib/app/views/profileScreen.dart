@@ -6,6 +6,7 @@ import 'package:time_planner/app/controllers/authenticationModuleController.dart
 import 'package:time_planner/app/controllers/homeModuleController.dart';
 import 'package:time_planner/app/data/theme/theme.dart';
 import 'package:time_planner/app/data/theme/themeService.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../widgets/customBackButton.dart';
 
@@ -19,16 +20,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Profile",
-          style: getBoldTextStyle,
-        ),
-        leading: CustomBackButton(),
-        backgroundColor: Get.theme.colorScheme.primary,
-        centerTitle: true,
-        elevation: 0,
-      ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SizedBox(
         height: Get.height,
@@ -38,21 +29,34 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 180,
+              height: 200,
               width: Get.width,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Get.theme.colorScheme.primary,
-                    Get.theme.colorScheme.secondary,
+                    Color.fromARGB(255, 32, 77, 135),
+                    Color.fromARGB(255, 111, 237, 251),
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
                 ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Container(
+                      height: 50,
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.arrowLeft,
+                          size: 15,
+                          color: Colors.white,
+                        ),
+                      )),
                   Container(
                       height: 50,
                       width: 50,
@@ -98,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    Text(
+                    /* Text(
                       'Settings',
                       style: getBoldTextStyle.copyWith(
                         fontSize: 20,
@@ -136,7 +140,7 @@ class ProfileScreen extends StatelessWidget {
                     const Divider(
                       color: greyColor,
                       height: 1,
-                    ),
+                    ),*/
                     const SizedBox(
                       height: 15,
                     ),
@@ -147,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
                         color: Get.isDarkMode ? whiteColor : darkBlueColor,
                       ),
                     ),
-                    GestureDetector(
+                    /*GestureDetector(
                       onTap: () {
                         homeModuleController.deleteUserData();
                       },
@@ -162,7 +166,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(
                       height: 5,
-                    ),
+                    ),*/
                     GestureDetector(
                       onTap: () {
                         authenticationModuleController.deleteUser();
@@ -170,9 +174,7 @@ class ProfileScreen extends StatelessWidget {
                       child: Text(
                         "Delete account",
                         style: getDefaultTextStyle.copyWith(
-                          color: Get.isDarkMode
-                              ? darkPrimaryColor
-                              : lightPrimaryColor,
+                          color: Color.fromARGB(255, 32, 77, 135),
                         ),
                       ),
                     ),
@@ -185,7 +187,7 @@ class ProfileScreen extends StatelessWidget {
               child: Text(
                 'Logout',
                 style: getBoldTextStyle.copyWith(
-                  color: Get.theme.colorScheme.primary,
+                  color: Colors.red,
                   fontSize: 20,
                 ),
               ),

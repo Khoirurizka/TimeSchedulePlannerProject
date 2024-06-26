@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:time_planner/app/services/postFunctions.dart';
@@ -9,6 +10,8 @@ import '../widgets/snackbar.dart';
 class HomeModuleController {
   var currentPageIndexOnMainframe = 0.obs;
   PageController mainframePageController = PageController(initialPage: 0);
+  TextEditingController toRoleTEC = TextEditingController();
+
   TextEditingController addATaskTitleTEC = TextEditingController();
   TextEditingController addATaskDescriptionTEC = TextEditingController();
   TextEditingController searchTEC = TextEditingController();
@@ -19,15 +22,60 @@ class HomeModuleController {
 
   selectDate(BuildContext context) async {
     var eventDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1998),
-      lastDate: DateTime(2100),
-    );
+        context: context,
+        locale: const Locale("id", "ID"),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1998),
+        lastDate: DateTime(2200),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                surface: Color.fromARGB(255, 255, 255, 255),
+                primary: Color.fromARGB(
+                    255, 136, 190, 255), // header background color
+                onPrimary: Colors.black, // header text color
+                onSurface: Color.fromARGB(255, 32, 77, 135), // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      Color.fromARGB(255, 32, 77, 135), // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        });
     if (eventDate != null) {
       var eventTime = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
+        builder: (context, child) {
+          Localizations.override(
+            context: context,
+            locale: Locale('id', 'ID'),
+            child: child,
+          );
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                surface: Color.fromARGB(255, 255, 255, 255),
+                primary: Color.fromARGB(
+                    255, 136, 190, 255), // header background color
+                onPrimary: Colors.black, // header text color
+                onSurface: Color.fromARGB(255, 32, 77, 135), // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      Color.fromARGB(255, 32, 77, 135), // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
       );
 
       if (eventTime != null) {
@@ -44,19 +92,22 @@ class HomeModuleController {
   }
 
   saveATask() async {
+    String toRole = toRoleTEC.value.text;
     String title = addATaskTitleTEC.value.text;
     String description = addATaskDescriptionTEC.value.text;
-    String status = "Pending";
-    if (title.isNotEmpty &&
+    String status = "Active";
+    if (toRole.isNotEmpty &&
+        title.isNotEmpty &&
         description.isNotEmpty &&
         showSelectedDate.value == true) {
       showLoadingAnimationInAddATaskPopup.value = true;
       await Future.delayed(const Duration(seconds: 2));
       String postedSuccessfully = await PostingFunctions().addATask(
+        toRole: toRole,
         title: title,
         description: description,
         eventDate: selectedEventDate.value,
-        status: "Pending",
+        status: status,
       );
       showLoadingAnimationInAddATaskPopup.value = false;
       if (postedSuccessfully == "Success") {
@@ -83,8 +134,8 @@ class HomeModuleController {
     }
   }
 
-  void deleteTodoTask(String id) async {
-    await PostingFunctions().deleteTodoTask(id);
+  void deleteTodoTask(String toRole, String id) async {
+    await PostingFunctions().deleteTodoTask(toRole, id);
     Get.back();
     showCustomSnackBar(
       title: "Kegiatan dihapus",
@@ -100,7 +151,6 @@ class HomeModuleController {
   void deleteUserData() async {
     await PostingFunctions().deleteUserData();
     showCustomSnackBar(
-        title: "Success",
-        message: "Done! You're relived of all of your todos. :)");
+        title: "Berhasil! :)", message: "Penghapusan telah berhasil");
   }
 }
